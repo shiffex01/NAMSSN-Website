@@ -26,7 +26,7 @@
 }
 
 .announceItem{
-    @apply bg-[#041b04] text-white md:p-6 gap-3 md:gap-6 p-4 flex flex-col justify-center rounded-xl;
+    @apply bg-[#041b04] text-white md:p-6 gap-3  md:gap-6 p-4 flex flex-col justify-center rounded-xl;
 
     & h1{
         @apply text-2xl font-bold md:text-3xl

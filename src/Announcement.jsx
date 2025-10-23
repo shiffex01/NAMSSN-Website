@@ -5,13 +5,13 @@ function Announcement(props) {
         {
             title: 'Title Goes Here',
             body: 'This is the body of this announcement. The main purpose of the announcement is for easier communication in the department. Lecturers can only drop update regarding high importance to themselves and can also specify the level for a particular update.',
-            img: './me.jpg ',
+            img: './prove.jpg ',
             date: '2026-03-11'
         },
         {
             title: 'Title Goes Here',
             body: 'This is the body of this announcement. The main purpose of the announcement is for easier communication in the department. Lecturers can only drop update regarding high importance to themselves and can also specify the level for a particular update.',
-            img: './me.jpg ',
+            img: './prove.jpg ',
             date: '2026-03-11'
         }
     ])

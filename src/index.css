@@ -14,11 +14,11 @@
 }
 
 .card_status{
-    @apply bg-gray-100 text-center p-4 rounded-lg shadow-2xl
+    @apply bg-gray-100 text-center p-4 rounded-lg shadow-2xl;
 }
 
 .head_card{
-    @apply text-2xl font-bold md:font-black text-[#041b04]
+    @apply text-2xl font-bold md:font-black text-[#041b04];
 }
 
 .announce{
@@ -29,11 +29,11 @@
     @apply bg-[#041b04] text-white md:p-6 gap-3  md:gap-6 p-4 flex flex-col justify-center rounded-xl;
 
     & h1{
-        @apply text-2xl font-bold md:text-3xl
+        @apply text-2xl font-bold md:text-3xl;
     }
 
     & p{
-        @apply text-sm md:text-base 
+        @apply text-sm md:text-base ;
     }
 }
 

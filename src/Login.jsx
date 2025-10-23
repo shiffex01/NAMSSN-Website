@@ -31,8 +31,12 @@ const Login = () => {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url('https://i.imgur.com/d4z5Y3W.png')] bg-cover bg-center relative">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div
+        className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+        style={{ backgroundImage: "url('/background.png')" }}
+    >
+
+      <div className="absolute inset-0 bg-[#041b04]/10 backdrop-blur-sm"></div>
 
       <div className="relative bg-white/90 rounded-2xl p-8 shadow-lg w-[90%] max-w-sm border border-green-200">
         <h2 className="text-2xl font-bold text-center text-green-900 mb-2">

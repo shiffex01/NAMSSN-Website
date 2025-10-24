@@ -14,7 +14,12 @@
 }
 
 .card_status{
-    @apply bg-gray-100 text-center p-4 rounded-lg shadow-2xl;
+    @apply bg-gray-100 hover:bg-[#0b3b0b] text-center p-4 rounded-lg shadow-2xl;
+
+}
+
+.group:hover .head_card{
+    @apply hover:text-white
 }
 
 .head_card{
@@ -71,4 +76,8 @@
     & p{
         @apply lg:text-xl text-center md:text-left;
     }
+}
+
+.studenttimeline_card{
+    @apply bg-[#041b04] lg:flex-row flex flex-col md:p-6 p-4 justify-between rounded-xl items-center;
 }

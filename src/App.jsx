@@ -6,13 +6,15 @@ import Scoreboard from "./Scoreboard";
 import Complaints from "./Complaints";
 import Announcement from "./Announcement";
 import Profile from "./Profile";
-import Login from "./Login"; // ✅ make sure this matches your file name
+import Login from "./Login"; 
+import ProtectedRoute from "./ProtectedRoute";
+import HomePage from "./HomePage";
 
 function Layout() {
   const location = useLocation();
 
-  // Hide sidebar on login page
-  const hideSidebar = location.pathname === "/login";
+  // Hide sidebar on login and home pages
+  const hideSidebar = location.pathname === "/" || location.pathname === "/login";
 
   return (
     <div className="flex min-h-screen bg-[#041b04] text-white">
@@ -20,19 +22,62 @@ function Layout() {
 
       <main className={`${!hideSidebar ? "md:ml-64 md:mt-0 mt-16" : ""} p-4 min-h-screen w-full`}>
         <Routes>
-          {/* Public Route */}
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protected / Dashboard Routes */}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/scoreboard" element={<Scoreboard />} />
-          <Route path="/verify" element={<Verifications />} />
-          <Route path="/complaints" element={<Complaints />} />
-          <Route path="/announce" element={<Announcement />} />
-          <Route path="/profile" element={<Profile />} />
+          {/* Protected Routes */}
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/scoreboard"
+            element={
+              <ProtectedRoute>
+                <Scoreboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/verify"
+            element={
+              <ProtectedRoute>
+                <Verifications />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/complaints"
+            element={
+              <ProtectedRoute>
+                <Complaints />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/announce"
+            element={
+              <ProtectedRoute>
+                <Announcement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Default redirect to login */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          {/* Default redirect for unknown routes */}
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>
       </main>
     </div>
@@ -42,7 +87,9 @@ function Layout() {
 function App() {
   return (
     <Router>
-      <Layout />
+      <Routes>
+        <Route path="/*" element={<Layout />} />
+      </Routes>
     </Router>
   );
 }

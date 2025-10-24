@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- Import this
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    regNumber: "",
+    username: "",
     password: "",
   });
 
@@ -17,17 +17,26 @@ const Login = () => {
   const handleSubmit = (e) => {
   e.preventDefault();
 
-  if (!formData.regNumber || !formData.password) {
+  if (!formData.username || !formData.password) {
     setError("Please fill in all fields.");
     return;
   }
   alert('Welcome back Student')
 
+  if (formData.username && formData.password) {
+      // ✅ Set login status in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+
+      // Redirect to dashboard
+      navigate("/home");
+    } else {
+      setError("Invalid registration number or password");
+    }
   console.log("Logging in with:", formData);
 
   // ✅ Redirect to dashboard
   setError("");
-  navigate("/");
+  navigate("/home");
 };
 
   return (
@@ -43,23 +52,23 @@ const Login = () => {
           Login
         </h2>
         <p className="text-sm text-center text-green-700 mb-4">
-          Login with your registration number and password
+          Login with your username and password
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
-              htmlFor="regNumber"
+              htmlFor="username"
               className="block text-sm font-medium text-green-800"
             >
-              Reg. Number
+              Username
             </label>
             <input
               type="text"
-              id="regNumber"
-              name="regNumber"
-              placeholder="Enter your reg. number"
-              value={formData.regNumber}
+              id="username"
+              name="username"
+              placeholder="Enter your email or username"
+              value={formData.username}
               onChange={handleChange}
               className="w-full mt-1 px-3 text-black py-2 border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
             />
@@ -94,7 +103,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-800 hover:bg-green-900 text-white py-2 rounded-full transition-all"
+            className="w-full cursor-pointer bg-green-800 hover:bg-green-900 text-white py-2 rounded-full transition-all"
           >
             Login
           </button>

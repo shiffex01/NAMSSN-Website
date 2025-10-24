@@ -27,7 +27,7 @@ function StudentTimeline({ level, faculty, coursesEnrolled, complaintsPublished 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Admission Year */}
-      <div className="card_status">
+      <div className="card_status group">
         <h3 className="head_card">Admission Year</h3>
         <p className="text-3xl font-bold text-green-500">
           {admissionYear}

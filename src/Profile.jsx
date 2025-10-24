@@ -86,8 +86,8 @@ function Profile(props) {
                                 {/* Grid layout for fields */}
                                 <div className="">
                                     {section.val.map((item, idx) => (
-                                    <div>
-                                        <div key={idx} className=" flex items-center justify-between">
+                                    <div key={idx}>
+                                        <div className=" flex items-center justify-between">
                                             <p>{item.name}</p>
                                             <p>{item.value}</p>
                                         </div>
@@ -104,7 +104,7 @@ function Profile(props) {
                 {/* Cards */}
                 <div>
                     <h2 className="md:text-2xl text-xl font-bold mt-10 mb-2 md:mb-4"> Student's Information </h2>
-                    <div className='bg-[#041b04] lg:flex-row flex flex-col md:p-6 p-4 justify-between rounded-xl items-center'>
+                    <div className='studenttimeline_card'>
                         <StudentTimeline 
                             level={300} 
                             faculty="Physical Science"

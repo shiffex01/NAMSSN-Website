@@ -1,6 +1,8 @@
 import { Home, FileText, CheckCircle, Bell, User, LogOut, Target, ContactRound, SquareMenu, X, SquarePen, Info, NotebookPen } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import { useState } from "react";
+import HomePage from "./HomePage";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Sidebar() {
@@ -13,6 +15,14 @@ export default function Sidebar() {
   const handleNavClick = () => {
     if (window.innerWidth < 768) setIsOpen(false);
   };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn"); // or your token key
+    navigate("/"); // go to Home page
+  };
+
 
   return (
     <>
@@ -49,12 +59,12 @@ export default function Sidebar() {
       <div>
         <h1 className="text-blue-300 text-lg font-bold mb-6 text-center">(NAMSSN)</h1>
         <nav className="space-y-2">
-          <SidebarItem to='/' icon={<Home size={18} />} handleNavClick={handleNavClick} label="Dashboard" />
-          <SidebarItem to='scoreboard' icon={<FileText size={18} />} handleNavClick={handleNavClick} label="Score Board" />
-          <SidebarItem to='complaints' icon={<SquarePen size={18} />} handleNavClick={handleNavClick} label="Complaints" />
-          <SidebarItem to='announce' icon={<Bell size={18} />} handleNavClick={handleNavClick} label="Announcements" />
-          <SidebarItem to='profile' icon={<User size={18} />} handleNavClick={handleNavClick} label="Profile" />
-          <SidebarItem to='logout' icon={<LogOut size={18} />} handleNavClick={handleNavClick} label="Logout" />
+          <SidebarItem to='/home' icon={<Home size={18} />} handleNavClick={handleNavClick} label="Dashboard" />
+          <SidebarItem to='/scoreboard' icon={<FileText size={18} />} handleNavClick={handleNavClick} label="Score Board" />
+          <SidebarItem to='/complaints' icon={<SquarePen size={18} />} handleNavClick={handleNavClick} label="Complaints" />
+          <SidebarItem to='/announce' icon={<Bell size={18} />} handleNavClick={handleNavClick} label="Announcements" />
+          <SidebarItem to='/profile' icon={<User size={18} />} handleNavClick={handleNavClick} label="Profile" />
+          <SidebarItem to='/#' onClick={handleLogout } icon={<LogOut size={18} />} handleNavClick={handleNavClick} label="Logout" />
         </nav>
 
         <div className="mt-6">

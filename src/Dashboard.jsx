@@ -2,7 +2,7 @@ import { Bell } from "lucide-react";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen md:p-6">
+    <div className="default">
       <h1 className="md:text-3xl text-2xl font-bold text-gray-100 mb-4">DASHBOARD</h1>
 
       {/* Welcome Section */}

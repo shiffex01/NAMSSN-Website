@@ -83,7 +83,7 @@ const handleSubmit = (e) => {
 
   // ===================== RENDER =====================
   return (
-    <div className="min-h-screen md:p-6">
+    <div className="default">
       <h1 className="head1 mb-4">COMPLAINTS</h1>
 
       <div className="bg-[#0b3b0b] rounded min-h-screen md:p-6 p-4">

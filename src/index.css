@@ -81,3 +81,24 @@
 .studenttimeline_card{
     @apply bg-[#041b04] lg:flex-row flex flex-col md:p-6 p-4 justify-between rounded-xl items-center;
 }
+
+.default{
+    @apply min-h-screen md:p-6;
+}
+
+.home_btn{
+    @apply bg-[radial-gradient(circle_at_center,_#027a02,_#041b04)] text-white text-xl lg:text-2xl font-black w-full px-4 md:px-10 py-6 rounded-lg shadow-md transition hover:scale-105;
+}
+
+.home_card{
+    @apply bg-[radial-gradient(circle_at_center,_#027a02,_#041b04)] text-white p-2 md:p-4 lg:p-6 rounded-lg shadow-md transition hover:scale-105 cursor-pointer;
+
+    & h4{
+        @apply lg:text-4xl md:text-2xl text-2xl font-black mb-3;
+    }
+
+    & p{
+        @apply lg:text-base text-sm italic;
+    }
+}
+

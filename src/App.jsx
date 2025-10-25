@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Dashboard from "./Dashboard";
-import Verifications from "./Verifications";
 import Scoreboard from "./Scoreboard";
 import Complaints from "./Complaints";
 import Announcement from "./Announcement";
 import Profile from "./Profile";
-import Login from "./Login"; 
+import StudentLogin from "./StudentLogin"; 
 import ProtectedRoute from "./ProtectedRoute";
 import HomePage from "./HomePage";
+import AdminLogin from "./AdminLogin";
+import StudentSignup from "./StudentSignUp";
+import AdminSignup from "./AdminSignup";
 
 function Layout() {
   const location = useLocation();
 
   // Hide sidebar on login and home pages
-  const hideSidebar = location.pathname === "/" || location.pathname === "/login";
+  const hideSidebar = location.pathname === "/" || location.pathname === "/student_login" || location.pathname === "/admin_login" || location.pathname === "/student_signup" || location.pathname === "/admin_signup";
 
   return (
     <div className="flex min-h-screen bg-[#041b04] text-white">
@@ -24,7 +26,10 @@ function Layout() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/student_login" element={<StudentLogin />} />
+          <Route path="/admin_login" element={<AdminLogin />} />
+          <Route path="/student_signup" element={<StudentSignup />} />
+          <Route path="/admin_signup" element={<AdminSignup />} />
 
           {/* Protected Routes */}
           <Route
@@ -40,14 +45,6 @@ function Layout() {
             element={
               <ProtectedRoute>
                 <Scoreboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/verify"
-            element={
-              <ProtectedRoute>
-                <Verifications />
               </ProtectedRoute>
             }
           />

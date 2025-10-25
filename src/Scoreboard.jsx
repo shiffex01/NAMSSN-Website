@@ -48,7 +48,7 @@ export default function Scoreboard() {
   const gpa = scores.length > 0 ? (totalScore / (scores.length * 100)) * 5 : 0;
 
   return (
-    <div className="min-h-screen md:p-6">
+    <div className="default">
       <div className="flex justify-between items-center mb-4">
         <h1 className="head1">SCOREBOARD</h1>
         <button className="md:flex hidden items-center gap-2 bg-green-500/40 hover:bg-green-600 text-white px-3 py-2 rounded-md">

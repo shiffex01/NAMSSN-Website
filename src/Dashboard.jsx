@@ -1,6 +1,39 @@
 import { Bell } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
+  
+  const [student, setStudent] = useState(null);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        // Replace reg_number with the logged-in student's reg_number
+        const storedStudent = JSON.parse(localStorage.getItem("loggedInStudent"));
+        if (!storedStudent) return;
+
+        const response = await fetch(`http://192.168.137.1/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
+        const data = await response.json();
+
+        if (data.status === "success") {
+          setStudent(data.student); // update state with latest info from DB
+        }
+      } catch (err) {
+        console.error("Error fetching student data:", err);
+      }
+    };
+
+    fetchStudent();
+
+    // Optional: refresh every 30 seconds
+    const interval = setInterval(fetchStudent, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!student) return <div>Loading...</div>;
+
+
+
   return (
     <div className="default">
       <h1 className="md:text-3xl text-2xl font-bold text-gray-100 mb-4">DASHBOARD</h1>
@@ -8,7 +41,7 @@ export default function Dashboard() {
       {/* Welcome Section */}
       <div className="bg-[#067706] rounded-xl p-5 shadow-md border border-green-900 mb-6">
         <h1 className="head1">
-          Welcome back <span className="text-white">Shiffy Anny!</span>
+          Welcome back{' '} <span className="text-white">{student? student.full_name : 'Student'}!</span>
         </h1>
         <p className="text-md text-gray-300 mt-1"> 
           Academic Session: <span className="text-[#041b04] font-bold">2024/2025</span> | 

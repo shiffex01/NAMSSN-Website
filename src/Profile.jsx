@@ -1,8 +1,38 @@
 import React from 'react';
 import StudentTimeline from './StudentTimeline';
 import GPAChart from './GPAChart';
+import { useState, useEffect } from 'react';
 
 function Profile(props) {
+
+      const [student, setStudent] = useState(null);
+    
+      useEffect(() => {
+        const fetchStudent = async () => {
+          try {
+            // Replace reg_number with the logged-in student's reg_number
+            const storedStudent = JSON.parse(localStorage.getItem("loggedInStudent"));
+            if (!storedStudent) return;
+    
+            const response = await fetch(`http://192.168.137.1/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
+            const data = await response.json();
+    
+            if (data.status === "success") {
+              setStudent(data.student); // update state with latest info from DB
+            }
+          } catch (err) {
+            console.error("Error fetching student data:", err);
+          }
+        };
+    
+        fetchStudent();
+    
+        // Optional: refresh every 30 seconds
+        const interval = setInterval(fetchStudent, 30000);
+        return () => clearInterval(interval);
+      }, []);
+    
+      if (!student) return <div>Loading...</div>;
 
     const demoGr = [
         {head: 'Contact Information', val:[
@@ -59,8 +89,8 @@ function Profile(props) {
                                 className="w-40 h-40 rounded-full"
                                 />
                                 <div>
-                                    <h1>Shiffy Anny</h1>
-                                    <p>U21MT1025</p>
+                                    <h1>{student? student.full_name : 'Student'}</h1>
+                                    <p>{student? student.reg_number : ''}</p>
                                     <p>Mathematics</p>
                                 </div>
                             </div>

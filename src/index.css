@@ -86,19 +86,20 @@
     @apply min-h-screen md:p-6;
 }
 
-.home_btn{
-    @apply bg-[radial-gradient(circle_at_center,_#027a02,_#041b04)] text-white text-xl lg:text-2xl font-black w-full px-4 md:px-10 py-6 rounded-lg shadow-md transition hover:scale-105;
+.home_btn {
+  @apply bg-[radial-gradient(circle_at_center,_#36f836,_#fff)] text-[#041b04] text-xl lg:text-2xl font-black px-10 py-4 rounded-lg shadow-md transition-transform hover:scale-105;
 }
 
-.home_card{
-    @apply bg-[radial-gradient(circle_at_center,_#027a02,_#041b04)] text-white p-2 md:p-4 lg:p-6 rounded-lg shadow-md transition hover:scale-105 cursor-pointer;
+.home_card {
+  @apply bg-[radial-gradient(circle_at_center,_#36f836,_#fff)] text-[#041b04] p-6 rounded-xl shadow-lg hover:scale-105 transition-transform cursor-pointer;
 
-    & h4{
-        @apply lg:text-4xl md:text-2xl text-2xl font-black mb-3;
-    }
+  & h4 {
+    @apply text-2xl lg:text-3xl font-black mb-3;
+  }
 
-    & p{
-        @apply lg:text-base text-sm italic;
-    }
+  & p {
+    @apply text-sm md:text-base italic;
+  }
 }
+
 

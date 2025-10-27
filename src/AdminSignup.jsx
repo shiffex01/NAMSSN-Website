@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ const AdminSignup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ Validation checks
+    // Validation
     if (
       !formData.fullname ||
       !formData.ID ||
@@ -31,18 +31,15 @@ const AdminSignup = () => {
       setError("Please fill in all fields.");
       return;
     }
-
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    // ✅ Save user info to localStorage
+    // Save to localStorage (later you’ll replace with backend API)
     localStorage.setItem("admin", JSON.stringify(formData));
 
     alert("Signup successful! You can now log in.");
-
-    // Redirect to login page
     navigate("/admin_login");
   };
 
@@ -51,21 +48,21 @@ const AdminSignup = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('/background.png')" }}
     >
-      <div className="absolute inset-0 bg-[#041b04]/10 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-[#041b04]/50 backdrop-blur-sm"></div>
 
-      <div className="relative bg-white/90 rounded-2xl p-8 shadow-lg w-[90%] max-w-sm border border-green-200">
-        <h2 className="text-2xl font-bold text-center text-green-900 mb-2">
-          Sign Up
-        </h2>
-        <p className="text-sm text-center text-green-700 mb-4">
-          Create your student account
+      <div className="relative bg-white/95 rounded-3xl p-8 md:p-10 shadow-2xl w-[90%] max-w-md border border-green-200">
+        <h1 className="text-3xl font-extrabold text-center text-green-900 mb-3">
+          Admin Sign Up
+        </h1>
+        <p className="text-sm text-center text-green-700 mb-6">
+          Create your admin account
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="fullname"
-              className="block text-sm font-medium text-green-800"
+              className="block text-sm font-semibold text-green-800 mb-1"
             >
               Full Name
             </label>
@@ -76,34 +73,34 @@ const AdminSignup = () => {
               placeholder="Enter your full name"
               value={formData.fullname}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 text-black border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
+              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="ID"
-              className="block text-sm font-medium text-green-800"
+              className="block text-sm font-semibold text-green-800 mb-1"
             >
-              ID
+              Admin ID / Code
             </label>
             <input
               type="text"
               id="ID"
               name="ID"
-              placeholder="Generate a combination or letters and numbers"
+              placeholder="e.g. ADM1234"
               value={formData.ID}
               onChange={handleChange}
-              className="w-full placeholder:text-[12px] mt-1 px-3 py-2 text-black border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
+              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-green-800"
+              className="block text-sm font-semibold text-green-800 mb-1"
             >
-              Email
+              Email Address
             </label>
             <input
               type="email"
@@ -112,14 +109,14 @@ const AdminSignup = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 text-black border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
+              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-green-800"
+              className="block text-sm font-semibold text-green-800 mb-1"
             >
               Password
             </label>
@@ -130,14 +127,14 @@ const AdminSignup = () => {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 text-black border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
+              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-green-800"
+              className="block text-sm font-semibold text-green-800 mb-1"
             >
               Confirm Password
             </label>
@@ -148,24 +145,31 @@ const AdminSignup = () => {
               placeholder="Re-enter your password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 text-black border border-green-700 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-sm"
+              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />
           </div>
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && (
+            <p className="text-red-600 text-sm text-center font-medium">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
-            className="w-full cursor-pointer bg-green-800 hover:bg-green-900 text-white py-2 rounded-full transition-all"
+            className="w-full bg-green-800 hover:bg-green-900 text-white py-2.5 rounded-full font-semibold shadow-md transition-all"
           >
             Sign Up
           </button>
 
-          <p className="text-xs text-center mt-2 text-[#020a02]">
-            Already have an account?{" "}
-            <a href="/admin_login" className="text-red-600 hover:underline">
-              Login Here
-            </a>
+          <p className="text-sm text-center text-gray-700 mt-4">
+            Already have an admin account?{" "}
+            <Link
+              to="/admin_login"
+              className="text-green-800 font-semibold hover:underline"
+            >
+              Login here
+            </Link>
           </p>
         </form>
       </div>

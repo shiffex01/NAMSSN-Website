@@ -14,7 +14,7 @@ function Profile(props) {
             const storedStudent = JSON.parse(localStorage.getItem("loggedInStudent"));
             if (!storedStudent) return;
     
-            const response = await fetch(`http://192.168.137.1/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
+            const response = await fetch(`http://192.168.126.155:5173/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
             const data = await response.json();
     
             if (data.status === "success") {
@@ -37,36 +37,36 @@ function Profile(props) {
     const demoGr = [
         {head: 'Contact Information', val:[
             {
-                name: 'Email Address', value: 'shiffex12anny@gmail.com'
+                name: 'Email Address', value: student? student.email : 'Student'
             },
             {
-                name: 'Phone Number', value: '08022935952'
+                name: 'Phone Number', value: student? student.phone : ''
             },
             {
-                name: 'Residential Address', value: 'Samaru, ABU, Zaria'
+                name: 'Residential Address', value: student? student.location : ""
             }]
         },
 
         {head: 'Demographic Information', val:[
             {
-                name: 'Date of Birth', value: '2000-03-03'
+                name: 'Date of Birth', value: student? student.dob : ""
             },
             {
-                name: 'Gender', value: 'Female'
+                name: 'Gender', value: student? student.sex : ""
             },
             {
-                name: 'Nationality', value: 'Nigeria'
+                name: 'Nationality', value: student? student.nation : ""
             }]
         },
         {head: 'Emergency Contact', val:[
             {
-                name: 'Name', value: 'Ayodeji'
+                name: 'Name', value: student? student.emg_cnt : ""
             },
             {
-                name: 'Phone Number', value: '02033746533'
+                name: 'Phone Number', value: student? student.e_phone : ""
             },
             {
-                name: 'Relationship', value: 'Sibling'
+                name: 'Relationship', value: student? student.relation : ""
             }]
         }
     ]
@@ -89,7 +89,7 @@ function Profile(props) {
                                 className="w-40 h-40 rounded-full"
                                 />
                                 <div>
-                                    <h1>{student? student.full_name : 'Student'}</h1>
+                                    <h1 className='text-center mb-2'>{student? student.full_name : 'Student'}</h1>
                                     <p>{student? student.reg_number : ''}</p>
                                     <p>Mathematics</p>
                                 </div>
@@ -117,9 +117,9 @@ function Profile(props) {
                                 <div className="">
                                     {section.val.map((item, idx) => (
                                     <div key={idx}>
-                                        <div className=" flex items-center justify-between">
+                                        <div className="demoG">
                                             <p>{item.name}</p>
-                                            <p>{item.value}</p>
+                                            <h3>{item.value}</h3>
                                         </div>
                                         <hr className='my-1'/>
                                     </div>
@@ -136,9 +136,9 @@ function Profile(props) {
                     <h2 className="md:text-2xl text-xl font-bold mt-10 mb-2 md:mb-4"> Student's Information </h2>
                     <div className='studenttimeline_card'>
                         <StudentTimeline 
-                            level={300} 
+                            level= {student? student.level : 'Not Found'} 
                             faculty="Physical Science"
-                            coursesEnrolled={12} 
+                            coursesEnrolled= {student? student.course : ""} 
                             complaintsPublished={4}
                         />
                     </div>  

@@ -1,5 +1,6 @@
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   
@@ -12,14 +13,14 @@ export default function Dashboard() {
         const storedStudent = JSON.parse(localStorage.getItem("loggedInStudent"));
         if (!storedStudent) return;
 
-        const response = await fetch(`http://192.168.137.1/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
+        const response = await fetch(`http://localhost/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
         const data = await response.json();
 
         if (data.status === "success") {
           setStudent(data.student); // update state with latest info from DB
         }
       } catch (err) {
-        console.error("Error fetching student data:", err);
+            console.error("Error fetching student data:", err);
       }
     };
 
@@ -41,12 +42,12 @@ export default function Dashboard() {
       {/* Welcome Section */}
       <div className="bg-[#067706] rounded-xl p-5 shadow-md border border-green-900 mb-6">
         <h1 className="head1">
-          Welcome back{' '} <span className="text-white">{student? student.full_name : 'Student'}!</span>
+          Welcome back{' '} <span className="text-white">{student? student.name : 'Student'}!</span>
         </h1>
         <p className="text-md text-gray-300 mt-1"> 
           Academic Session: <span className="text-[#041b04] font-bold">2024/2025</span> | 
           Semester: <span className="text-[#041b04] font-bold">First</span> | 
-          Level: <span className="text-[#041b04] font-bold">300L</span>
+          Level: <span className="text-[#041b04] font-bold">{student? student.level : 'Level'}</span>
         </p>
       </div>
 
@@ -64,7 +65,7 @@ export default function Dashboard() {
 
         <div className="bg-[#0b3b0b] p-4 rounded-xl border border-green-900 shadow-md flex items-center justify-between">
           <div>
-            <h3 className="text-2xl font-black mb-2">New Results: <span className="text-green-400 text-3xl">3</span></h3>
+            <h3 className="text-2xl font-black mb-2">New Upload: <span className="text-green-400 text-3xl">3</span></h3>
             <h3 className="text-2xl font-black">Complaints: <span className="text-green-400 text-3xl">5</span></h3>
           </div>
           <div>
@@ -85,9 +86,12 @@ export default function Dashboard() {
           </ul>
           <hr className="mt-2 border-gray-400"/>
           <div className="flex items-center justify-center">
-            <button className="mt-3 px-4 cursor-pointer py-1 text-center bg-green-800 hover:bg-green-700 text-white text-sm rounded">
-                View Results
+            <Link 
+            to = '/scoreboard'>
+              <button className="mt-3 px-4 cursor-pointer py-1 text-center bg-green-800 hover:bg-green-700 text-white text-sm rounded">
+                View Scores
             </button>
+            </Link>
           </div>
         </div>
 
@@ -102,9 +106,11 @@ export default function Dashboard() {
             <div className="w-full">
                 <hr className="mt-2 border-gray-400"/>
                 <div className="flex items-center justify-center">
-                    <button className="mt-3 px-4 cursor-pointer py-1 text-center bg-green-800 hover:bg-green-700 text-white text-sm rounded">
+                    <Link to='/announce'>
+                      <button className="mt-3 px-4 cursor-pointer py-1 text-center bg-green-800 hover:bg-green-700 text-white text-sm rounded">
                         See Anouncements
-                    </button>
+                      </button>
+                    </Link>
                 </div>
             </div>
           </div>
@@ -114,9 +120,11 @@ export default function Dashboard() {
 
       <div className="flex items-center mb-6 justify-end pr-3">
         <div className="mt-4 flex gap-2">
-            <button className="cursor-pointer bg-green-700 hover:bg-green-600 text-white text-sm px-8 py-3 rounded">
+            <Link to='/complaints'> 
+              <button className="cursor-pointer bg-green-700 hover:bg-green-600 text-white text-sm px-8 py-3 rounded">
                 Submit a Complaint
-            </button>
+              </button>
+            </Link>
         </div>
       </div>
 

@@ -26,7 +26,7 @@ const StudentLogin = () => {
     }
 
     try {
-      const response = await fetch("http://192.168.137.1/namssn_portal/login.php", {
+      const response = await fetch("http://192.168.126.155:5173/namssn_portal/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

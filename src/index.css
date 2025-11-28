@@ -103,3 +103,10 @@
 }
 
 
+.demoG{
+    @apply flex items-center justify-between;
+
+    & h3 {
+        @apply text-right text-lg;
+    }
+}

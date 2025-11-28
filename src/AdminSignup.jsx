@@ -36,7 +36,7 @@ const AdminSignup = () => {
       return;
     }
 
-    // Save to localStorage (later you’ll replace with backend API)
+    // Save to localStorage (later I’ll replace with backend API)
     localStorage.setItem("admin", JSON.stringify(formData));
 
     alert("Signup successful! You can now log in.");

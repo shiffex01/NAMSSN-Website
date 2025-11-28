@@ -58,7 +58,7 @@ export default function Scoreboard() {
 
       {/* Filters */}
       <div className="flex w-full items-center justify-between flex-wrap mb-6">
-        <StudentDropdown />
+        <StudentDropdown allscores={scores} setScores = {setScores}/>
         <div className="bg-[#0b3b0b] p-4 rounded-md flex items-center md:mt-0 mt-4 justify-center w-fit md:w-[10%] h-12 cursor-pointer">
           <Search />
           <p className="md:hidden flex ml-2"> Search </p>

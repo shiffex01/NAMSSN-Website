@@ -3,27 +3,26 @@ import { useNavigate, Link } from "react-router-dom";
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
-    fullname: "",
-    ID: "",
+    admin_code: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Validation
     if (
-      !formData.fullname ||
-      !formData.ID ||
+      !formData.admin_code ||
       !formData.email ||
       !formData.password ||
       !formData.confirmPassword
@@ -31,16 +30,40 @@ const AdminSignup = () => {
       setError("Please fill in all fields.");
       return;
     }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    // Save to localStorage (later I’ll replace with backend API)
-    localStorage.setItem("admin", JSON.stringify(formData));
+    setLoading(true);
 
-    alert("Signup successful! You can now log in.");
-    navigate("/admin_login");
+    try {
+      const res = await fetch("http://localhost/namssn_portal/signup.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_code: formData.admin_code,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.status === "success") {
+        alert("Account activated successfully. You can now log in.");
+        navigate("/admin_login");
+      } else {
+        setError(data.message);
+      }
+    } catch (err) {
+      setError("Server error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,35 +82,18 @@ const AdminSignup = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          
           <div>
             <label
-              htmlFor="fullname"
-              className="block text-sm font-semibold text-green-800 mb-1"
-            >
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="fullname"
-              name="fullname"
-              placeholder="Enter your full name"
-              value={formData.fullname}
-              onChange={handleChange}
-              className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="ID"
+              htmlFor="admin_code"
               className="block text-sm font-semibold text-green-800 mb-1"
             >
               Admin ID / Code
             </label>
             <input
               type="text"
-              id="ID"
-              name="ID"
+              id="admin_code"
+              name="admin_code"
               placeholder="e.g. ADM1234"
               value={formData.ID}
               onChange={handleChange}

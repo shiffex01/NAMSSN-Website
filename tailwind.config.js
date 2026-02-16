@@ -10,6 +10,7 @@ export default {
         namsGreen: "#041b04", // Base dark green
         namsDark: "#013001",  // Deeper green shade
         namsLight: "#0b3b0b", // Lighter shade for hover or accents
+        grnAdmain: "#122F2B" // Admin's main color
       },
       backgroundImage: {
         // Optional: for your radiant/round glow background

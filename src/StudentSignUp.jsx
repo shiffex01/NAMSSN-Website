@@ -39,7 +39,7 @@ const StudentSignup = () => {
     }); // 👈 debug - shows payload before sending
 
     try {
-      const response = await fetch("http://192.168.126.155:5173/namssn_portal/signup.php", {
+      const response = await fetch("http://localhost/namssn_portal/signup.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

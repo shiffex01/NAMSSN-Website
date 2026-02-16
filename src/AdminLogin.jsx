@@ -1,47 +1,67 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE } from "./api";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
-    ID: "",
+    admin_code: "",
     password: "",
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (!formData.ID || !formData.password) {
+    if (!formData.admin_code || !formData.password) {
       setError("Please fill in all fields.");
       return;
     }
 
-    const savedUser = JSON.parse(localStorage.getItem("admin"));
+    setLoading(true);
 
-    if (!savedUser) {
-      setError("No account found. Please sign up first.");
-      return;
-    }
+    try {
+      const res = await fetch(`${API_BASE}/login.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          admin_code: formData.admin_code,
+          password: formData.password,
+        }),
+      });
 
-    // Match by ID or email
-    if (
-      (formData.ID === savedUser.ID || formData.ID === savedUser.email) &&
-      formData.password === savedUser.password
-    ) {
-      localStorage.setItem("isLoggedIn", "true");
-      alert("Welcome back, Admin!");
-      alert("The Admin page is not yet ready.");
-      // navigate("/admin_dashboard"); <-- you’ll use this when the page is ready
-    } else {
-      setError("Invalid ID/email or password.");
+      const data = await res.json();
+
+      const payloadAdmin = data?.admin || data?.data?.admin;
+
+      if (data.status === "success" && payloadAdmin) {
+        localStorage.setItem("isAdminLoggedIn", "true");
+        localStorage.setItem("adminName", payloadAdmin.full_name);
+
+        alert(`Welcome back, ${payloadAdmin.full_name}!`);
+        navigate("/admin");
+      } else {
+        setError(data.message || "Login failed.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <div
@@ -61,17 +81,17 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
-              htmlFor="ID"
+              htmlFor="admin_code"
               className="block text-sm font-semibold text-green-800 mb-1"
             >
               Admin ID / Email
             </label>
             <input
               type="text"
-              id="ID"
-              name="ID"
-              placeholder="Enter your ID or email"
-              value={formData.ID}
+              id="admin_code"
+              name="admin_code"
+              placeholder="Enter your Admin ID"
+              value={formData.admin_code}
               onChange={handleChange}
               className="w-full px-4 py-2 text-sm border border-green-700 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 placeholder-gray-400"
             />

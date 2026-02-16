@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_BASE } from "./api";
 
 export default function Complaints() {
   const [formData, setFormData] = useState({
@@ -28,15 +29,20 @@ export default function Complaints() {
 
   // Load complaints on mount
     useEffect(() => {
-      const savedComplaints = localStorage.getItem("complaints");
-      if (savedComplaints) {
-        try {
-          setComplaints(JSON.parse(savedComplaints));
-        } catch {
-          localStorage.removeItem("complaints"); // clear bad data
-        }
-      }
-    }, []);
+    const run = async () => {
+      const res = await fetch(`${API_BASE}/student/list_my_complaints.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok || data.status !== "success") throw new Error(data.message || "Failed");
+      setComplaints(data.data || []);
+    };
+
+    run().catch((e) => alert(e.message));
+  }, []);
 
 // Save complaints when they change
 useEffect(() => {
@@ -46,31 +52,43 @@ useEffect(() => {
 }, [complaints]);
 
 // Handle submit
-const handleSubmit = (e) => {
-  e.preventDefault();
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const newComplaint = {
-    id: generateId(),
-    ...formData,
-    date: new Date().toLocaleDateString(),
-    status: "Under Review",
+    const fd = new FormData();
+    fd.append("complaintType", formData.complaintType);
+    fd.append("course", formData.course);
+    fd.append("subject", formData.subject);
+    fd.append("description", formData.description);
+    if (formData.evidence) fd.append("evidence", formData.evidence);
+
+    const res = await fetch(`${API_BASE}/student/submit_complaint.php`, {
+      method: "POST",
+      credentials: "include",
+      body: fd,
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.status !== "success") throw new Error(data.message || "Failed");
+
+    // reload list
+    const listRes = await fetch(`${API_BASE}/student/list_my_complaints.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({}),
+    });
+    const listData = await listRes.json();
+    setComplaints(listData.data || []);
+
+    setFormData({
+      complaintType: "",
+      course: "",
+      subject: "",
+      description: "",
+      evidence: null,
+    });
   };
-
-  setComplaints((prev) => {
-    const updated = [...prev, newComplaint];
-    localStorage.setItem("complaints", JSON.stringify(updated)); // manual save
-    return updated;
-  });
-
-  // Reset form
-  setFormData({
-    complaintType: "",
-    course: "",
-    subject: "",
-    description: "",
-    evidence: null,
-  });
-};
 
 
   // ===================== STATUS COUNTS =====================
@@ -192,23 +210,22 @@ const handleSubmit = (e) => {
             <tbody>
               {complaints.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan="7"
-                    className="p-3 text-center text-gray-400 italic"
-                  >
+                  <td colSpan="7" className="p-3 text-center text-gray-400 italic">
                     No complaints submitted yet.
                   </td>
                 </tr>
               ) : (
                 complaints.map((item) => (
-                  <tr key={item.id} className="border-t border-gray-200">
-                    <td className="p-2 table_right">{item.id}</td>
-                    <td className="p-2 table_right">{item.complaintType}</td>
+                  <tr key={item.ref_id} className="border-t border-gray-200">
+                    <td className="p-2 table_right">{item.ref_id}</td>
+                    <td className="p-2 table_right">{item.complaint_type}</td>
                     <td className="p-2 table_right">{item.course}</td>
                     <td className="p-2 table_right">{item.subject}</td>
-                    <td className="p-2 table_right">{item.date}</td>
                     <td className="p-2 table_right">
-                      {item.status || "Under Review"}
+                      {new Date(item.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="p-2 table_right font-semibold">
+                      {item.status}
                     </td>
                     <td className="p-2 table_right text-green-700 font-bold cursor-pointer hover:underline">
                       View Thread

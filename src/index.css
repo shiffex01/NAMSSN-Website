@@ -9,6 +9,12 @@
     @apply bg-[#0b3b0b] md:bg-none md:p-0 md:rounded-none p-4 rounded-xl w-full;
 }
 
+.admin_head{
+    @apply md:text-3xl text-2xl font-bold text-[#122F2B] mb-6;
+}
+
+
+
 .head1{
     @apply md:text-3xl text-2xl font-bold text-gray-100;
 }
@@ -27,11 +33,11 @@
 }
 
 .announce{
-    @apply flex flex-col gap-4 md:gap-6 md:px-30;
+    @apply grid md:grid-cols-2 gap-4 md:gap-6 md:px-15;
 }
 
 .announceItem{
-    @apply bg-[#041b04] text-white md:p-6 gap-3  md:gap-6 p-4 flex flex-col justify-center rounded-xl;
+    @apply bg-[#041b04] text-white md:p-6 p-4 gap-3 md:gap-6 flex flex-col justify-center rounded-xl h-fit;
 
     & h1{
         @apply text-2xl font-bold md:text-3xl;
@@ -66,6 +72,26 @@
     }
 }
 
+.inputClass {
+    @apply w-full mt-1 p-2 border text-[#041b04] border-[#041b04] rounded outline-none focus:outline-none focus:ring-2 focus:ring-green-600;
+    }
+
+    .status{
+        @apply bg-amber-100 text-amber-900 border-amber-200 text-sm md:text-lg
+    }
+
+.inputClass::placeholder {
+  color: gray;
+  opacity: 1;     
+}
+
+.table_contents{
+    @apply px-3 py-3 text-sm md:text-lg font-bold text-[#122F2B] border border-emerald-200/80;
+}
+
+.table_head{
+    @apply text-left text-lg md:text-xl font-bold px-3 py-3;
+}
 .profile_grid{
     @apply bg-[#041b04] lg:p-6 p-4 rounded-2xl shadow;
 

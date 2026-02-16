@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE } from "./api";
 
 const StudentLogin = () => {
   const [formData, setFormData] = useState({
@@ -8,50 +9,73 @@ const StudentLogin = () => {
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // clear previous error
+    setError("");
+    setLoading(true);
 
     const { regNumber, password } = formData;
 
     if (!regNumber || !password) {
+      setLoading(false);
       setError("Please fill in all fields.");
       return;
     }
 
     try {
-      const response = await fetch("http://192.168.126.155:5173/namssn_portal/login.php", {
+      const response = await fetch(`${API_BASE}/login.php`, {
         method: "POST",
+        credentials: "include", 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           reg_number: regNumber,
-          password: password,
+          password,
         }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.log("RAW RESPONSE (not JSON):", text);
+        setLoading(false);
+        setError("Backend did not return JSON. Check console for RAW RESPONSE.");
+        return;
+      }
+
       console.log("Server response:", data);
 
       if (data.status === "success") {
-        const fullName = data.student.full_name;
-        alert(`Welcome back, ${fullName}!`); // ✅ Display student's name
+      
+        const student = data.data?.student;
 
+        //  local storage
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("loggedInStudent", JSON.stringify(data.student));
+        if (student) {
+          localStorage.setItem("loggedInStudent", JSON.stringify(student));
+          alert(`Welcome back, ${student.full_name}!`);
+        } else {
+          alert("Login successful!");
+        }
 
         navigate("/home");
       } else {
-        setError(data.message);
+        setError(data.message || "Login failed.");
       }
     } catch (err) {
       console.error("Error connecting to server:", err);
       setError("Something went wrong while connecting to the server.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,9 +141,10 @@ const StudentLogin = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-800 hover:bg-green-900 text-white py-2.5 rounded-full font-semibold shadow-md transition-all"
+            disabled={loading}
+            className="w-full bg-green-800 hover:bg-green-900 disabled:opacity-60 text-white py-2.5 rounded-full font-semibold shadow-md transition-all"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           <p className="text-sm text-center text-gray-700 mt-4">

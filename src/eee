@@ -1,0 +1,53 @@
+{isPreviewOpen && (
+          <div
+            className="fixed inset-0 z-[999] flex items-center justify-center px-3"
+            aria-modal="true"
+            role="dialog"
+            onMouseDown={(e) => {
+              // click outside closes
+              if (e.target === e.currentTarget) setIsPreviewOpen(false);
+            }}
+          >
+            {/* backdrop */}
+            <div className="absolute inset-0 bg-black/70" />
+
+            {/* modal box */}
+            <div className="relative w-full max-w-3xl">
+              <button
+                type="button"
+                onClick={() => setIsPreviewOpen(false)}
+                className="absolute -top-3 -right-3 bg-white text-black w-9 h-9 rounded-full font-extrabold shadow hover:brightness-95"
+                aria-label="Close preview"
+              >
+                ×
+              </button>
+
+              {/* card like your screenshot */}
+              <div className="bg-white text-[#0b0b0b] rounded-md border border-emerald-200/80 p-5 shadow-lg">
+                <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
+                  {previewData.title}
+                </h1>
+
+                <p className="mt-3 text-sm md:text-base font-semibold text-[#122F2B]">
+                  {previewData.body}
+                </p>
+
+                {previewData.img ? (
+                  <div className="mt-4 w-28 h-20 rounded-md overflow-hidden border border-emerald-200/80">
+                    <img
+                      src={previewData.img}
+                      alt="announcement attachment"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : null}
+
+                <p className="mt-4 italic font-bold text-sm md:text-base">
+                  Posted by{" "}
+                  <span className="font-extrabold">{previewData.admin}</span> on{" "}
+                  <span className="text-red-600 font-extrabold">{previewData.date}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}

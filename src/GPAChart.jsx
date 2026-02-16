@@ -62,7 +62,7 @@ const GPAChart = ({ faculty }) => {
         </LineChart>
       </ResponsiveContainer>
     </div>
-    <p className="italic mt-3">For more information concerning your CGPA, visit your main dashboard at <span className="text-red-500 underline"> portal.abu.edu. </span> </p>
+    <p className="italic mt-3">For more information concerning your CGPA, visit your main dashboard at <a blank href="https://portal.abu.edu.ng" className="text-red-500 underline"> portal.abu.edu. </a> </p>
     </div>
   );
 };

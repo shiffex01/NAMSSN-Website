@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  // Example: check login status (you can store real login data in localStorage)
+  // Store real login data in localStorage
   const isAuthenticated = localStorage.getItem("isLoggedIn");
 
   // If not logged in, redirect to login page

@@ -2,32 +2,74 @@ import React from 'react';
 import StudentTimeline from './StudentTimeline';
 import GPAChart from './GPAChart';
 import { useState, useEffect } from 'react';
+import { API_BASE } from './api';
+import { Link } from 'react-router-dom';
 
 function Profile(props) {
 
       const [student, setStudent] = useState(null);
+      const [error, setError] = useState("");
+      const [loading, setLoading] = useState(true);
+
     
       useEffect(() => {
+        let mounted = true;
+
         const fetchStudent = async () => {
-          try {
-            // Replace reg_number with the logged-in student's reg_number
-            const storedStudent = JSON.parse(localStorage.getItem("loggedInStudent"));
-            if (!storedStudent) return;
-    
-            const response = await fetch(`http://192.168.126.155:5173/namssn_portal/get_student.php?reg_number=${storedStudent.reg_number}`);
-            const data = await response.json();
-    
-            if (data.status === "success") {
-              setStudent(data.student); // update state with latest info from DB
+        try {
+            setError("");
+
+            const res = await fetch(
+            `${API_BASE}/get_student.php`,
+            {
+                method: "GET",
+                credentials: "include", 
             }
-          } catch (err) {
+            );
+
+            const text = await res.text();
+            let data;
+
+            try {
+            data = JSON.parse(text);
+            } catch {
+            if (!mounted) return;
+            console.log("RAW RESPONSE:", text);
+            setError("Backend did not return JSON.");
+            setLoading(false);
+            return;
+            }
+
+            if (!mounted) return;
+
+            if (data.status === "success") {
+            setStudent(data.data?.student ?? null);
+            setLoading(false);
+            return;
+            }
+
+            // 🔹 If session is gone / expired → back to login
+            if (res.status === 401) {
+            setStudent(null);
+            setLoading(false);
+            navigate("/student_login");
+            return;
+            }
+
+            setStudent(null);
+            setLoading(false);
+            setError(data.message || "Failed to load student data.");
+        } catch (err) {
             console.error("Error fetching student data:", err);
-          }
+            if (!mounted) return;
+            setLoading(false);
+            setError("Error fetching student data. Please try again.");
+        }
         };
-    
+
         fetchStudent();
     
-        // Optional: refresh every 30 seconds
+        // Refresh every 30 seconds
         const interval = setInterval(fetchStudent, 30000);
         return () => clearInterval(interval);
       }, []);
@@ -89,7 +131,7 @@ function Profile(props) {
                                 className="w-40 h-40 rounded-full"
                                 />
                                 <div>
-                                    <h1 className='text-center mb-2'>{student? student.full_name : 'Student'}</h1>
+                                    <h1 className='text-center mb-2'>{student? student.name : 'Student'}</h1>
                                     <p>{student? student.reg_number : ''}</p>
                                     <p>Mathematics</p>
                                 </div>
@@ -127,6 +169,12 @@ function Profile(props) {
                                 </div>
                                 </div>
                             ))}
+
+                            <div>
+                                <Link to="/edit_profile">
+                                    <button className="cursor-pointer bg-white hover:bg-green-600 text-green-700 font-bold text-lg px-8 py-3 rounded-xl">Edit Profile</button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

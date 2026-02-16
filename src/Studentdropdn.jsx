@@ -1,56 +1,72 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 export default function StudentDropdown({ allScores, setScores }) {
   const [level, setLevel] = useState("");
   const [semester, setSemester] = useState("");
 
-  const filterScores = () => {
-    if (!level || !semester) return allScores;
+  const applyFilter = (nextLevel, nextSemester) => {
+    if (!Array.isArray(allScores)) {
+      setScores([]);
+      return;
+    }
 
-    const startDigit = level[0];
+    if (!nextLevel || !nextSemester) {
+      setScores(allScores);
+      return;
+    }
 
-    const wantOdd = semester === "First Semester";
-    const wantEven = semester === "Second Semester";
+    const wantLevelDigit = nextLevel[0]; 
+    const wantOdd = nextSemester === "First Semester";
+    const wantEven = nextSemester === "Second Semester";
 
-    return allScores.filter((item) => {
-      const code = item.code;
+    const filtered = allScores.filter((item) => {
+      const code = String(item?.code ?? "").trim(); 
+      const digits = code.match(/\d+/)?.[0];        // trim the digits out
+      if (!digits) return false;
 
-      const startsCorrectly = code.startsWith(startDigit);
-      const lastDigit = Number(code[code.length - 1]);
+      const levelDigit = digits[0];
+      const lastDigit = Number(digits[digits.length - 1]);
 
-      const endsCorrectly =
+      const levelOk = levelDigit === wantLevelDigit;
+      const semOk =
         (wantOdd && lastDigit % 2 === 1) ||
         (wantEven && lastDigit % 2 === 0);
 
-      return startsCorrectly && endsCorrectly;
+      return levelOk && semOk;
     });
+
+    setScores(filtered);
   };
 
-  // Whenever level/semester changes → update the main table
-  useEffect(() => {
-    const filtered = filterScores();
-    setScores(filtered);
-  }, [level, semester]);
+  const onLevelChange = (e) => {
+    const nextLevel = e.target.value;
+    setLevel(nextLevel);
+    applyFilter(nextLevel, semester);
+  };
+
+  const onSemesterChange = (e) => {
+    const nextSemester = e.target.value;
+    setSemester(nextSemester);
+    applyFilter(level, nextSemester);
+  };
 
   return (
     <div className="flex flex-col w-full md:w-[80%] md:gap-10 gap-6 md:flex-row">
-
       {/* Level */}
       <div className="flex flex-col w-full">
-        <label className="text-sm font-semibold text-gray-700 mb-1">
-          Level
-        </label>
+        <label className="text-sm font-semibold text-gray-700 mb-1">Level</label>
         <div className="relative">
           <select
             value={level}
-            onChange={(e) => setLevel(e.target.value)}
+            onChange={onLevelChange}
             className="appearance-none w-full p-2 border border-gray-300 rounded-md bg-white text-[#0b3b0b] focus:ring-2 focus:ring-green-700"
           >
             <option value="">Select Level</option>
             <option>100L</option>
             <option>200L</option>
             <option>300L</option>
+            <option>400L</option>
           </select>
           <ChevronDown size={18} className="absolute right-3 top-3 text-[#0b3b0b] pointer-events-none" />
         </div>
@@ -58,13 +74,11 @@ export default function StudentDropdown({ allScores, setScores }) {
 
       {/* Semester */}
       <div className="flex flex-col w-full">
-        <label className="text-sm font-semibold text-gray-700 mb-1">
-          Semester
-        </label>
+        <label className="text-sm font-semibold text-gray-700 mb-1">Semester</label>
         <div className="relative">
           <select
             value={semester}
-            onChange={(e) => setSemester(e.target.value)}
+            onChange={onSemesterChange}
             className="appearance-none w-full p-2 border border-gray-300 rounded-md bg-white text-[#0b3b0b] focus:ring-2 focus:ring-green-700"
           >
             <option value="">Select Semester</option>
@@ -74,7 +88,6 @@ export default function StudentDropdown({ allScores, setScores }) {
           <ChevronDown size={18} className="absolute right-3 top-3 text-[#0b3b0b] pointer-events-none" />
         </div>
       </div>
-
     </div>
   );
 }

@@ -32,7 +32,7 @@ function Announcement(props) {
                             <h1> {item.title} </h1>
                             <p> {item.body} </p>
                             <img src={item.img ? item.img : null } 
-                                className='md:size-1/4'
+                                className='h-1/2 object-cover w-full rounded-2xl'
                             />
                             <p className='italic font-semibold'> Posted by {item.admin} on <span className='text-red-600'> {item.date} </span> </p>
                         </div>
